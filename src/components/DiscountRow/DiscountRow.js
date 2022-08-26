@@ -4,13 +4,10 @@
 function DiscountRow(props){
 
 
-return (<tr>
-<td> {props.firmaAdi} </td>
-<td> {props.indirimOrani} </td>
-<td>  {props.indirimKapsami} </td>
-<td> {props.detay} </td>
-<td> {props.kontak} </td>
-
-</tr>);
+return (<tr><td>{props.firmName}</td>
+<td>{props.discountInfo}</td>
+<td>{props.discountScope}</td>
+<td>{props.discountDetail}</td>
+<td>{props.firmContact}</td></tr>);
 }
 export default DiscountRow;

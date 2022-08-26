@@ -6,6 +6,11 @@ import FilterDiscount from "./components/FilterDiscount/FilterDiscount";
 import PreLoader from "./components/PreLoader/PreLoader";
 function App(props) {
 const [isPreloadershown, setIsPreloadershown] = useState(true);
+
+
+const [discountsArr, setDiscountsArr] = useState([]);
+ if (isPreloadershown){
+
   fetch('http://localhost:5103/GetAllDiscounts', {
     method: 'GET', // or 'PUT'
    
@@ -13,6 +18,9 @@ const [isPreloadershown, setIsPreloadershown] = useState(true);
   })
     .then((response) => response.json())
     .then((data) => {
+
+      setDiscountsArr(data);
+
       console.log('Success:', data);
       setIsPreloadershown(false);
     })
@@ -20,6 +28,9 @@ const [isPreloadershown, setIsPreloadershown] = useState(true);
       console.error('Error:', error);
     });
 
+
+ }
+ 
 
 //   const AlldiscountArray=[{firmaAdi:"Firma1",indirimOrani:10,detay:"detay1",indirimKapsami:"kapsam1",kontak:"kontak1"},
 
@@ -33,14 +44,25 @@ const [isPreloadershown, setIsPreloadershown] = useState(true);
 
 
 // };
+let renderedElement;
+if (isPreloadershown){
+  renderedElement =  (<div> <PreLoader isShown={isPreloadershown}/> </div>);
 
+
+
+}
+else {
+
+  renderedElement=( <div>   <FilterDiscount setDiscountsArr={setDiscountsArr} />
+  <DiscountTable discountArray={discountsArr}/></div>)
+
+}
   return (
-<div>  <PreLoader isShown={isPreloadershown}/>sa</div>
+<div>  sa
    
-    // <div className="App">
-    //   <FilterDiscount onFilter={onFilter} discountArray={AlldiscountArray}/>
-    // <DiscountTable discountArray={filteredDiscountArr}/>
-    // </div>
+{renderedElement}
+   
+    </div>
   );
 }
 

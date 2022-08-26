@@ -3,8 +3,9 @@ import DiscountRow from "../DiscountRow/DiscountRow";
 
 function DiscountTable (props){
 
-const discountArray = props.discountArray;
-
+let discountArray = props.discountArray;
+console.log(discountArray);
+// discountArray = [{firmName: 'firm_name1', discountInfo: 'discount_info1', discountScope: 'discount_scope1', discountDetail: 'discount_detail1', firmContact: 'firm_contact1'}];
     return (
 <div>  
 <h1> İndirim Listesi</h1>
@@ -17,9 +18,7 @@ const discountArray = props.discountArray;
 <th>Kontak</th>
 </tr>
 </thead>
-<tbody>
-    {discountArray.map(discountElement => (<DiscountRow firmaAdi={discountElement.firmaAdi} indirimOrani={discountElement.indirimOrani} indirimKapsami={discountElement.indirimKapsami} kontak={discountElement.kontak} detay={discountElement.detay}></DiscountRow>))}
-
+<tbody>{discountArray.map(discountElement => (<DiscountRow firmName={discountElement.firmName} discountInfo={discountElement.discountInfo} discountScope={discountElement.discountScope} firmContact={discountElement.firmContact} detay={discountElement.detay}></DiscountRow>))}
 </tbody>
 
 

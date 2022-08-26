@@ -4,13 +4,33 @@
 
 function FilterDiscount(props){
 
-const discountArray = props.discountArray;
+
 
     const onSearchClick = (event) =>{
 const searchTerm=event.target.value;
 console.log("serafh" + searchTerm);
-let filteredArr = discountArray.filter(discount => discount.firmaAdi === searchTerm);
-props.onFilter(filteredArr);
+
+fetch('http://localhost:5103/GetDiscountsByFilter',{
+    method: 'POST', // or 'PUT'
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({firmName:searchTerm}),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+
+        props.setDiscountsArr(data);
+
+      console.log('filtre içi:', data);
+
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+
+
     };
 
 
