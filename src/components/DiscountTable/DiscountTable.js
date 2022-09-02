@@ -14,11 +14,11 @@ console.log(discountArray);
 <tr> <th>Firma Adı</th> 
 <th>İndirim Orani</th>
 <th>İndirim Kapsami</th>
-<th>Detay</th>
-<th>Kontak</th>
+<th>Firma Kontak</th>
+<th>Geçerli Şehirler</th>
 </tr>
 </thead>
-<tbody>{discountArray.map(discountElement => (<DiscountRow firmName={discountElement.firmName} discountInfo={discountElement.discountInfo} discountScope={discountElement.discountScope} firmContact={discountElement.firmContact} detay={discountElement.detay}></DiscountRow>))}
+<tbody style={{textAlign:"center"}}>{discountArray.map(discountElement => (<DiscountRow firmName={discountElement.firmName} discountInfo={discountElement.discountInfo} discountScope={discountElement.discountScope} firmContact={discountElement.firmContact} validCities={discountElement.validCities} ></DiscountRow>))}
 </tbody>
 
 

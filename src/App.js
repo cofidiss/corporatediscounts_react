@@ -8,9 +8,9 @@ function App(props) {
 const [isPreloadershown, setIsPreloadershown] = useState(true);
 
 
-const [discountsArr, setDiscountsArr] = useState([]);
+const [discountsArrState, setDiscountsArrState] = useState([]);
  if (isPreloadershown){
-
+  console.log('isPreloadershown: true');
   fetch('http://localhost:5103/GetAllDiscounts', {
     method: 'GET', // or 'PUT'
    
@@ -19,7 +19,7 @@ const [discountsArr, setDiscountsArr] = useState([]);
     .then((response) => response.json())
     .then((data) => {
 
-      setDiscountsArr(data);
+      setDiscountsArrState(data);
 
       console.log('Success:', data);
       setIsPreloadershown(false);
@@ -53,8 +53,8 @@ if (isPreloadershown){
 }
 else {
 
-  renderedElement=( <div>   <FilterDiscount setDiscountsArr={setDiscountsArr} />
-  <DiscountTable discountArray={discountsArr}/></div>)
+  renderedElement=( <div>   <FilterDiscount setDiscountsArrState={setDiscountsArrState} />
+  <DiscountTable discountArray={discountsArrState}/></div>)
 
 }
   return (
