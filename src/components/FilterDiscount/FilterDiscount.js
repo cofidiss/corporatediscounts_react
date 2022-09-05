@@ -5,11 +5,15 @@ import { useState } from "react";
 
 function FilterDiscount(props){
 
+const discountScopeLov = props.discountScopeLov;
     const [firmNameState,setFirmNameState] = useState(null);
+
+
     const [discountScopeState,setDiscountScopeState] = useState(null);
+
     const onFirmNameChange= (event)=> {
 
-        setFirmNameState(event.target.value);
+        setFirmNameState(event.target.value.trim() === ""? null:event.target.value);
     }
     const ondiscountScopeChange= (event)=> {
 
@@ -27,7 +31,7 @@ if (searchObj[prop] === null){
 delete searchObj[prop];
 
 }}
-if (Object.entries(searchObj).length==0){
+if (Object.entries(searchObj).length===0){
 
     
     fetch('http://localhost:5103/GetAllDiscounts',{
@@ -63,7 +67,7 @@ fetch('http://localhost:5103/GetDiscountsByFilter',{
 
       console.log('filtre içi:', data);
 
-    })
+    }) 
     .catch((error) => {
       console.error('Error:', error);
     });
@@ -73,6 +77,7 @@ fetch('http://localhost:5103/GetDiscountsByFilter',{
     };
 
 
+
   return (<div>
 <h1> Filtreleme</h1>
 <label for="firmName"> Firma Adı: </label>
@@ -80,8 +85,10 @@ fetch('http://localhost:5103/GetDiscountsByFilter',{
 <label for="discountScope"> İndirim Kapsamı: </label>
 <select id="discountScope" value={discountScopeState} onChange={ondiscountScopeChange} >
 <option value=""></option>
-<option value="1">çalışanlar</option>
-<option value="2">çalışanlar/aileleri</option>
+  {discountScopeLov.map((element)=>(<option value={element.discountScopeId}>{element.discountScopeName}</option>))}
+
+
+
 </select>
 <button onClick={onSearchClick}> Ara</button>
  

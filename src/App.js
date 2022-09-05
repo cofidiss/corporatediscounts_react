@@ -5,12 +5,47 @@ import DiscountTable from "./components/DiscountTable/DiscountTable";
 import FilterDiscount from "./components/FilterDiscount/FilterDiscount";
 import PreLoader from "./components/PreLoader/PreLoader";
 function App(props) {
-const [isPreloadershown, setIsPreloadershown] = useState(true);
+
+  console.log("app rendered");
+  const [discountScopeLovState,setDiscountScopeLovState] = useState(null);
+
+  const [isPreloadershown, setIsPreloadershown] = useState(true);
 
 
-const [discountsArrState, setDiscountsArrState] = useState([]);
- if (isPreloadershown){
-  console.log('isPreloadershown: true');
+  const [discountsArrState, setDiscountsArrState] = useState(null);
+
+  function GetDiscountScopeLov(){
+
+    fetch('http://localhost:5103/GetDiscountScopeLov',{
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+  
+          setDiscountScopeLovState(data);
+  
+        console.log('GetDiscountScopeLov:', data);
+  
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  
+  
+  }
+  if (discountScopeLovState === null){
+    GetDiscountScopeLov();
+    
+  }
+ 
+
+function GetAllDiscounts(){
+
+
   fetch('http://localhost:5103/GetAllDiscounts', {
     method: 'GET', // or 'PUT'
    
@@ -21,29 +56,28 @@ const [discountsArrState, setDiscountsArrState] = useState([]);
 
       setDiscountsArrState(data);
 
-      console.log('Success:', data);
-      setIsPreloadershown(false);
+      console.log('GetAllDiscounts:', data);
+  
     })
     .catch((error) => {
       console.error('Error:', error);
     });
 
 
- }
+}
+if (discountsArrState === null){
+  GetAllDiscounts();
+  
+}
+if (discountScopeLovState !== null && discountsArrState !== null && isPreloadershown !== false){
+
+   setIsPreloadershown(false);
+
+
+}
+
  
 
-//   const AlldiscountArray=[{firmaAdi:"Firma1",indirimOrani:10,detay:"detay1",indirimKapsami:"kapsam1",kontak:"kontak1"},
-
-//   {firmaAdi:"Firma2",indirimOrani:20,detay:"detay2",indirimKapsami:"kapsam2",kontak:"kontak2"}
-//   ];
-
-//   const [filteredDiscountArr,setfilteredDiscountArr] = useState(AlldiscountArray);
-//   console.log(filteredDiscountArr);
-// const onFilter =(filteredArr)=>{
-//   setfilteredDiscountArr(filteredArr);
-
-
-// };
 let renderedElement;
 if (isPreloadershown){
   renderedElement =  (<div> <PreLoader isShown={isPreloadershown}/> </div>);
@@ -53,12 +87,12 @@ if (isPreloadershown){
 }
 else {
 
-  renderedElement=( <div>   <FilterDiscount setDiscountsArrState={setDiscountsArrState} />
+  renderedElement=( <div> sinan  <FilterDiscount setDiscountsArrState={setDiscountsArrState} discountScopeLov={discountScopeLovState} />
   <DiscountTable discountArray={discountsArrState}/></div>)
 
 }
   return (
-<div>  sa
+<div>  
    
 {renderedElement}
    

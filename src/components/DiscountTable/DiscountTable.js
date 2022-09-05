@@ -4,7 +4,7 @@ import DiscountRow from "../DiscountRow/DiscountRow";
 function DiscountTable (props){
 
 let discountArray = props.discountArray;
-console.log(discountArray);
+console.log("DiscountTable: " + discountArray);
 // discountArray = [{firmName: 'firm_name1', discountInfo: 'discount_info1', discountScope: 'discount_scope1', discountDetail: 'discount_detail1', firmContact: 'firm_contact1'}];
     return (
 <div>  
