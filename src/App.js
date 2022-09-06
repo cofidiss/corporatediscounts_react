@@ -5,7 +5,7 @@ import DiscountTable from "./components/DiscountTable/DiscountTable";
 import FilterDiscount from "./components/FilterDiscount/FilterDiscount";
 import PreLoader from "./components/PreLoader/PreLoader";
 function App(props) {
-
+const baseUrl="http://localhost:5103";
   console.log("app rendered");
   const [discountScopeLovState,setDiscountScopeLovState] = useState(null);
 
@@ -14,67 +14,54 @@ function App(props) {
 
   const [discountsArrState, setDiscountsArrState] = useState(null);
 
-  function GetDiscountScopeLov(){
+function InitPage(){
 
-    fetch('http://localhost:5103/GetDiscountScopeLov',{
-      method: 'POST', // or 'PUT'
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-  
-          setDiscountScopeLovState(data);
-  
-        console.log('GetDiscountScopeLov:', data);
-  
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  
-  
-  }
-  if (discountScopeLovState === null){
-    GetDiscountScopeLov();
-    
-  }
- 
+const getDiscountScopeLovPromise =  fetch(baseUrl + '/GetDiscountScopeLov',{
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(),
+})
+  .then((response) =>{
+    if (response.status !== 200){
+      throw new Error(`HTTP error! Status: ${response.status}`);
 
-function GetAllDiscounts(){
+    }
 
-
-  fetch('http://localhost:5103/GetAllDiscounts', {
-    method: 'GET', // or 'PUT'
+   return response.json(); 
+  } );
+  const getAllDiscountsPromise = 
+  fetch(baseUrl + '/GetAllDiscounts', {
+    method: 'POST', // or 'PUT'
    
    
   })
-    .then((response) => response.json())
-    .then((data) => {
-
-      setDiscountsArrState(data);
-
-      console.log('GetAllDiscounts:', data);
+    .then((response) => {
+      if (response.status !== 200){
+        throw new Error(`HTTP error! Status: ${response.status}`);
   
-    })
-    .catch((error) => {
-      console.error('Error:', error);
+      }
+  
+     return response.json(); 
     });
 
 
-}
-if (discountsArrState === null){
-  GetAllDiscounts();
-  
-}
-if (discountScopeLovState !== null && discountsArrState !== null && isPreloadershown !== false){
-
-   setIsPreloadershown(false);
+  Promise.all([getAllDiscountsPromise,getDiscountScopeLovPromise]).then(results=> {
+    console.log(results);
+    setDiscountScopeLovState(results[1]);
+    setDiscountsArrState(results[0]);
+setIsPreloadershown(false);
+  });
 
 
 }
+if (isPreloadershown){
+  InitPage();
+
+
+}
+
 
  
 

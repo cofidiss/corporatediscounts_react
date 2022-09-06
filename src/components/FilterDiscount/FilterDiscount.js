@@ -35,7 +35,7 @@ if (Object.entries(searchObj).length===0){
 
     
     fetch('http://localhost:5103/GetAllDiscounts',{
-        method: 'GET', // or 'PUT'
+        method: 'POST', // or 'PUT'
 })
         .then((response) => response.json())
         .then((data) => {
