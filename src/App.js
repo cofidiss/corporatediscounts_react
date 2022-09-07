@@ -4,15 +4,19 @@ import './App.css';
 import DiscountTable from "./components/DiscountTable/DiscountTable";
 import FilterDiscount from "./components/FilterDiscount/FilterDiscount";
 import PreLoader from "./components/PreLoader/PreLoader";
+import MyModal from './components/MyModal/MyModal';
+
+
 function App(props) {
 const baseUrl="http://localhost:5103";
   console.log("app rendered");
   const [discountScopeLovState,setDiscountScopeLovState] = useState(null);
 
-  const [isPreloadershown, setIsPreloadershown] = useState(true);
 
-
+  const [isInitRun, setIsInitRun] = useState(false);
+  const [isInitRunHasError, setIsInitRunHasError] = useState(false);
   const [discountsArrState, setDiscountsArrState] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 function InitPage(){
 
@@ -46,45 +50,57 @@ const getDiscountScopeLovPromise =  fetch(baseUrl + '/GetDiscountScopeLov',{
      return response.json(); 
     });
 
-
+   
   Promise.all([getAllDiscountsPromise,getDiscountScopeLovPromise]).then(results=> {
     console.log(results);
     setDiscountScopeLovState(results[1]);
     setDiscountsArrState(results[0]);
-setIsPreloadershown(false);
-  });
 
 
-}
-if (isPreloadershown){
-  InitPage();
-
-
-}
-
-
+setIsInitRunHasError(false);
+setIsModalOpen(false);
+  }).catch(error=>{
+    console.log("hata" + error);
  
+    
+    setIsInitRunHasError(true);
+    setIsModalOpen(true);
 
-let renderedElement;
-if (isPreloadershown){
-  renderedElement =  (<div> <PreLoader isShown={isPreloadershown}/> </div>);
+  
 
 
+  }).finally(()=> {setIsInitRun(true);});
 
+
+}
+
+
+if (isInitRun=== false){
+  InitPage();
+  return (<PreLoader/>);
+
+  
+}
+
+else {
+
+if (isInitRunHasError){
+
+return (<MyModal isOpen={isModalOpen} closeModal={x=>setIsModalOpen(false)}> <p>Hata oldu tekrar deneyin</p></MyModal>);
 }
 else {
 
-  renderedElement=( <div> sinan  <FilterDiscount setDiscountsArrState={setDiscountsArrState} discountScopeLov={discountScopeLovState} />
-  <DiscountTable discountArray={discountsArrState}/></div>)
+  return ( <div> sinan  <FilterDiscount setDiscountsArrState={setDiscountsArrState} discountScopeLov={discountScopeLovState} />
+  <DiscountTable discountArray={discountsArrState}/></div>);
+
 
 }
-  return (
-<div>  
-   
-{renderedElement}
-   
-    </div>
-  );
+
+
+
+
+ 
+}
 }
 
 export default App;
