@@ -1,6 +1,6 @@
 import { useState } from "react";
-
-
+import MyModal from '../MyModal/MyModal';
+import PreLoader from "../PreLoader/PreLoader";
 
 
 function FilterDiscount(props){
@@ -8,7 +8,9 @@ function FilterDiscount(props){
 const discountScopeLov = props.discountScopeLov;
     const [firmNameState,setFirmNameState] = useState(null);
 
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    const [isPreloaderShown, setisPreloaderShown] = useState(false);
     const [discountScopeState,setDiscountScopeState] = useState(null);
 
     const onFirmNameChange= (event)=> {
@@ -22,6 +24,8 @@ const discountScopeLov = props.discountScopeLov;
 
     
     const onSearchClick = (event) =>{
+      setisPreloaderShown(true);
+
 const searchObj={firmName:firmNameState,discountScopeId:discountScopeState};
 console.log("searchObj" );
 console.log(searchObj);
@@ -31,27 +35,8 @@ if (searchObj[prop] === null){
 delete searchObj[prop];
 
 }}
-if (Object.entries(searchObj).length===0){
 
-    
-    fetch('http://localhost:5103/GetAllDiscounts',{
-        method: 'POST', // or 'PUT'
-})
-        .then((response) => response.json())
-        .then((data) => {
-    
-            props.setDiscountsArrState(data);
-    
-   
-    
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    
-    
-}
-else {
+
 
 fetch('http://localhost:5103/GetDiscountsByFilter',{
     method: 'POST', // or 'PUT'
@@ -60,7 +45,12 @@ fetch('http://localhost:5103/GetDiscountsByFilter',{
     },
     body: JSON.stringify(searchObj),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status !== 200){
+      throw new Error(`HTTP error! Status: ${response.status}`);
+
+    }
+return response.json();})
     .then((data) => {
 
         props.setDiscountsArrState(data);
@@ -69,16 +59,17 @@ fetch('http://localhost:5103/GetDiscountsByFilter',{
 
     }) 
     .catch((error) => {
+
+      setIsModalOpen(true);
+
       console.error('Error:', error);
-    });
-
-
-}
+    }).finally(()=>   setisPreloaderShown(false));
     };
 
 
 
-  return (<div>
+  return (<div> {isPreloaderShown  ?  <PreLoader/> :""}
+  {isModalOpen ? <MyModal isOpen={isModalOpen} closeModal={x=>setIsModalOpen(false)}>"hata meydana geldi tekrar deneyin"</MyModal>:""}
 <h1> Filtreleme</h1>
 <label for="firmName"> Firma Adı: </label>
 <input type="text" id="firmName" value={firmNameState} onChange={onFirmNameChange}></input>
