@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import PreLoader  from "../Preloader/Preloader";
 
 
 function FilterDiscounts(props){
@@ -7,7 +7,7 @@ function FilterDiscounts(props){
   const [firmLovState,setFirmLov] =   useState([]);
   const [discountScopeovState,setDiscountScopeLov] =   useState([]);
   const [discountCategoryLovState,setDiscountCategoryLov] =   useState([]);
-
+const [isPreloaderShownState,setPreloaderShown] = useState(false);
     const baseUrl = props.baseUrl;
 
  const firmsLovPromise =    fetch(`${baseUrl}/FirmSelectLov`, {
@@ -58,6 +58,7 @@ setPreloaderShown(false);
 
     return (
 <div>
+  <PreLoader isShown={isPreloaderShownState}/>
     <div>  
 <label>Firma Adı: </label>
 <select>
