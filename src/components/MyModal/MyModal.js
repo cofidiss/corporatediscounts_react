@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 
 
 function MyModal(props) {
-const isModalOpen = props.isModalOpen;
+const isOpen = props.isOpen;
 
   Modal.setAppElement('#root');
 
@@ -29,7 +29,7 @@ const customStyles = {
       <div>
              
         <Modal
-          isOpen={true}
+          isOpen={isOpen}
          
           style={customStyles}
           

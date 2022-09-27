@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState,useEffect  } from "react";
 import PreLoader  from "../Preloader/Preloader";
 import MyModal from "../MyModal/MyModal";
+import  "./FilterDiscounts.css";
 
 function FilterDiscounts(props){
+
+  const setDiscounts = props.setDiscounts;
+
 console.log("FilterDiscounts rendered");
   const baseUrl = props.baseUrl;
-  const [formState,setForm] =   useState({firmId:-1});
+  const [formState,setForm] =   useState({firmId:-1,discountCategoryId:-1,discountScopeId:-1});
   const [firmLovState,setFirmLov] =   useState([]);
   const [discountScopeLovState,setDiscountScopeLov] =   useState([]);
   const [discountCategoryLovState,setDiscountCategoryLov] =   useState([]);
@@ -28,7 +32,7 @@ throw new Error(`hata meydana geldi: Status: ${response.status}`)
 
 }
 return response.json(); });
-searchPromise.then(x => true).catch(x => setModal({isOpen:true,content:"hata oldu tekrar deneyiniz"})).finally(x => setPreloaderShown(false))
+searchPromise.then(x => setDiscounts(x)).catch(x => setModal({isOpen:true,content:"hata oldu tekrar deneyiniz"})).finally(x => setPreloaderShown(false))
   
 
 };
@@ -101,7 +105,7 @@ setDiscountScopeLov(x[2]);
 
 
 },x=> {
-// error modal göster
+  setModal({isOpen:true,content:"Hata Meydana geldi"}); 
 }).finally(() => {
 setInitRun(true);
 setPreloaderShown(false);
@@ -111,13 +115,26 @@ setPreloaderShown(false);
 
 }
 
+useEffect(() => {console.log("FilterDiscounts effect");
+ var filterDiscountsDiv =  document.getElementById("filterDiscounts");
+ var optionElements = filterDiscountsDiv.getElementsByTagName("option");
+ debugger;
+ for (let option of optionElements) {
+    if (option.getAttribute("class") === "level-2") {
+
+      option.innerHTML=  "&nbsp&nbsp"+ option.innerHTML;
+    }
+}
+});
+
 
    
 
 
     return (
-<div onChange={onFormChange}>
-  {modalState.isOpen ? <MyModal closeModal={x => setModal({isOpen:false,content:null})}> {modalState.content}</MyModal>: null }
+<div onChange={onFormChange} id="filterDiscounts"> 
+<h1>Filtreleme</h1>
+  <MyModal isOpen={modalState.isOpen} closeModal={x => setModal({isOpen:false,content:null})}> {modalState.content}</MyModal>
   <PreLoader isShown={isPreloaderShownState}/>
     <div>  
 <label>Firma Adı: </label>
@@ -132,7 +149,7 @@ setPreloaderShown(false);
 <label>İndirim Kategorisi: </label>
 <select  id="discountCategorySelect" value={formState.discountCategoryId}>
 <option value="-1"> Hepsi</option>
-{discountCategoryLovState.map(x => {return (<option value={x.id}>{x.name}</option>);})}
+{discountCategoryLovState.map(x => {return (<option className={"level-" + x.levelNo} value={x.id}>{x.name}</option>);})}
 
 </select>
 </div>
