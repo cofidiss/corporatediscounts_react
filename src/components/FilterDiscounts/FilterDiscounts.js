@@ -9,14 +9,24 @@ function FilterDiscounts(props){
 
 console.log("FilterDiscounts rendered");
   const baseUrl = props.baseUrl;
-  const [formState,setForm] =   useState({firmId:-1,discountCategoryId:-1,discountScopeId:-1});
+  const formInitialValue = {firmId:-1,discountCategoryId:-1,discountScopeId:-1};
+  const [formState,setForm] =   useState(formInitialValue);
   const [firmLovState,setFirmLov] =   useState([]);
+  const [shouldClickSearchState,setShouldClickSearch] =   useState(false);
+  const [readyToRenderState,setReadyToRender] =   useState(false);
   const [discountScopeLovState,setDiscountScopeLov] =   useState([]);
   const [discountCategoryLovState,setDiscountCategoryLov] =   useState([]);
 const [isPreloaderShownState,setPreloaderShown] = useState(true);
 const [isInitRunState,setInitRun] = useState(false);
 const [modalState,setModal] = useState({isOpen:false,content:null});
 
+
+const ClearForm = e => {
+
+    setForm(formInitialValue);
+    setShouldClickSearch(true);
+
+};
 const Search = e => {
   setPreloaderShown(true);
   const searchPromise =    fetch(`${baseUrl}/FilterDiscounts`, {
@@ -102,6 +112,7 @@ Promise.all([firmLovPromise,discountCategoryLovPromise,discountScopeLovPromise,]
 setFirmLov(x[0]);
 setDiscountCategoryLov(x[1]);
 setDiscountScopeLov(x[2]);
+setReadyToRender(true);
 
 
 },x=> {
@@ -125,17 +136,17 @@ useEffect(() => {console.log("FilterDiscounts effect");
       option.innerHTML=  "&nbsp&nbsp"+ option.innerHTML;
     }
 }
+
+if (shouldClickSearchState){
+  setShouldClickSearch(false);
+document.querySelector("#filterDiscounts").querySelector("#search-button").click();
+
+
+}
 });
 
-
-   
-
-
-    return (
-<div onChange={onFormChange} id="filterDiscounts"> 
-<h1>Filtreleme</h1>
-  <MyModal isOpen={modalState.isOpen} closeModal={x => setModal({isOpen:false,content:null})}> {modalState.content}</MyModal>
-  <PreLoader isShown={isPreloaderShownState}/>
+const renderedElement = (<div> 
+  <h1>Filtreleme</h1>
     <div>  
 <label>Firma Adı: </label>
 <select value={formState.firmState} id="firmSelect">
@@ -162,7 +173,20 @@ useEffect(() => {console.log("FilterDiscounts effect");
 
 </select>
 </div>
-<button onClick={Search}> Ara</button>
+<button id="search-button" onClick={Search}> Ara</button>
+<button onClick={ClearForm}> Filtreyi Temizle</button>
+ 
+  </div>);
+   
+
+
+    return (
+<div onChange={onFormChange} id="filterDiscounts"> 
+<MyModal isOpen={modalState.isOpen} closeModal={x => setModal({isOpen:false,content:null})}> {modalState.content}</MyModal>
+  <PreLoader isShown={isPreloaderShownState}/>
+
+  {readyToRenderState ? renderedElement  : null}
+
 
 </div>
 
