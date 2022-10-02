@@ -146,8 +146,8 @@ document.querySelector("#filterDiscounts").querySelector("#search-button").click
 });
 
 const renderedElement = (<div> 
-  <h1>Filtreleme</h1>
-    <div>  
+  <h1 style={{textAlign:'center'}}>İndirim Arama</h1>
+    <div className="form-element">  
 <label>Firma Adı: </label>
 <select value={formState.firmState} id="firmSelect">
   <option value="-1"> Hepsi</option>
@@ -156,7 +156,7 @@ const renderedElement = (<div>
 </select>
 </div>
 
-<div>  
+<div className="form-element">  
 <label>İndirim Kategorisi: </label>
 <select  id="discountCategorySelect" value={formState.discountCategoryId}>
 <option value="-1"> Hepsi</option>
@@ -165,7 +165,7 @@ const renderedElement = (<div>
 </select>
 </div>
 
-<div>  
+<div className="form-element">  
 <label>İndirim Kapsamı:  </label>
 <select  id="discountScopeSelect" value={formState.discountScopeId}>
 <option value="-1"> Hepsi</option>
@@ -173,8 +173,10 @@ const renderedElement = (<div>
 
 </select>
 </div>
-<button id="search-button" onClick={Search}> Ara</button>
-<button onClick={ClearForm}> Filtreyi Temizle</button>
+<div className="clear-fix" style={{clear:"both"}}> 
+<button onClick={ClearForm}  style={{float:"right",margin:"0px 10px 10px 10px"}}> Filtreyi Temizle</button>
+<button id="search-button" onClick={Search} style={{float:"right",margin:"0px 10px 10px 10px"}}> Ara</button></div>
+
  
   </div>);
    

@@ -1,6 +1,9 @@
 import { useState,useEffect  } from "react";
 import PreLoader  from "../Preloader/Preloader";
 import MyModal from "../MyModal/MyModal";
+import  "./DiscountsTable.css";
+
+
 
 function DiscountsTable(props){
 
@@ -15,7 +18,7 @@ if (discountArr.length === 0){
 <div>
 
 
-<table>
+<table className="table table-striped">
 
     <thead>
 <tr> 
