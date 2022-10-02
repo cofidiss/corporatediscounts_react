@@ -33,10 +33,12 @@ const customStyles = {
          
           style={customStyles}
           
-        >
+        ><div>  <button onClick={props.closeModal} style={{float:"right",marginBottom:"10px"}}>Kapat</button>
+<div style={{clear:"both"}}>   { props.children} </div>
+        
+       </div>
           
-          <button onClick={props.closeModal}>Kapat</button>
-         { props.children}
+         
         </Modal>
       </div>
     );
